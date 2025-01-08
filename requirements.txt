@@ -50,7 +50,9 @@ numpy==1.26.4
 orjson==3.10.13
 packaging==24.2
 pandas==2.2.3
+pip==24.3.1
 pillow==11.1.0
+pywin32==308
 plotly==5.24.1
 portalocker==2.10.1
 propcache==0.2.1
