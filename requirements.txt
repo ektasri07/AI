@@ -1,4 +1,4 @@
-﻿aiohappyeyeballs==2.4.4
+aiohappyeyeballs==2.4.4
 aiohttp==3.11.11
 aiosignal==1.3.2
 altair==5.5.0
@@ -50,9 +50,7 @@ numpy==1.26.4
 orjson==3.10.13
 packaging==24.2
 pandas==2.2.3
-pip==24.3.1
 pillow==11.1.0
-pywin32==308
 plotly==5.24.1
 portalocker==2.10.1
 propcache==0.2.1
@@ -67,6 +65,7 @@ PyJWT==2.10.1
 PyPDF2==3.0.1
 python-dateutil==2.9.0.post0
 pytz==2024.2
+pywin32==308
 PyYAML==6.0.2
 referencing==0.35.1
 requests==2.32.3
