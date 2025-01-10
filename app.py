@@ -1,3 +1,5 @@
+import openai
+import requests
 from flask import Flask, request
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.costmanagement import CostManagementClient
