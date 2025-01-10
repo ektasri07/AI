@@ -5,8 +5,9 @@ import requests
 from datetime import datetime
 from botbuilder.core import BotFrameworkAdapter, BotFrameworkAdapterSettings, TurnContext
 from botbuilder.schema import Activity, ActivityTypes
-from flask import Flask, request
+from quart import Quart, request
 import asyncio
+
 
 # Function to fetch cost data
 def get_cost_data(start_date, end_date):
@@ -51,36 +52,39 @@ def get_cost_data(start_date, end_date):
     response.raise_for_status()  # Raise an exception for HTTP errors
     return response.json()
 
+
 # Streamlit UI
-st.title("Azure Subscription Cost Chatbot")
+def run_streamlit():
+    st.title("Azure Subscription Cost Chatbot")
 
-# Chatbot conversation
-user_input = st.text_input("Ask me about Azure costs:")
+    # Chatbot conversation
+    user_input = st.text_input("Ask me about Azure costs:")
 
-if user_input:
-    # Extract dates from user input (assuming a specific format for simplicity)
-    try:
-        start_date_str, end_date_str = user_input.split(" to ")
-        start_date = datetime.strptime(start_date_str.strip(), '%Y-%m-%d')
-        end_date = datetime.strptime(end_date_str.strip(), '%Y-%m-%d')
+    if user_input:
+        # Extract dates from user input (assuming a specific format for simplicity)
+        try:
+            start_date_str, end_date_str = user_input.split(" to ")
+            start_date = datetime.strptime(start_date_str.strip(), '%Y-%m-%d')
+            end_date = datetime.strptime(end_date_str.strip(), '%Y-%m-%d')
 
-        cost_data = get_cost_data(start_date, end_date)
+            cost_data = get_cost_data(start_date, end_date)
 
-        # Extract relevant data and create a DataFrame
-        data = []
-        for item in cost_data['properties']['rows']:
-            data.append({
-                'Resource Group': item[2],
-                'Date': item[1],
-                'Cost': item[0]
-            })
+            # Extract relevant data and create a DataFrame
+            data = []
+            for item in cost_data['properties']['rows']:
+                data.append({
+                    'Resource Group': item[2],
+                    'Date': item[1],
+                    'Cost': item[0]
+                })
 
-        df = pd.DataFrame(data)
+            df = pd.DataFrame(data)
 
-        # Display the DataFrame in tabular format using Streamlit
-        st.write(df)
-    except ValueError:
-        st.write("Please enter dates in the format 'YYYY-MM-DD to YYYY-MM-DD'.")
+            # Display the DataFrame in tabular format using Streamlit
+            st.write(df)
+        except ValueError:
+            st.write("Please enter dates in the format 'YYYY-MM-DD to YYYY-MM-DD'.")
+
 
 # Bot Framework integration
 class CostBot:
@@ -104,15 +108,17 @@ class CostBot:
             except ValueError:
                 await turn_context.send_activity("Please enter dates in the format 'YYYY-MM-DD to YYYY-MM-DD'.")
 
+
 # Create the bot instance
 bot = CostBot()
 
 # Adapter settings
-settings = BotFrameworkAdapterSettings("", "")
+settings = BotFrameworkAdapterSettings("YOUR_APP_ID", "YOUR_APP_PASSWORD")
 adapter = BotFrameworkAdapter(settings)
 
-# Flask app to handle incoming requests
-app = Flask(__name__)
+# Quart app to handle incoming requests
+app = Quart(__name__)
+
 
 @app.route('/api/messages', methods=['POST'])
 async def messages():
@@ -124,6 +130,12 @@ async def messages():
         return response.body
     return 'OK'
 
+
 if __name__ == '__main__':
-    if __name__ == '__main__':
+    # Run Streamlit in a separate thread
+    import threading
+
+    threading.Thread(target=run_streamlit).start()
+
+    # Run Quart app
     app.run(host='0.0.0.0', port=80)
