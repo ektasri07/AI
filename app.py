@@ -1,11 +1,9 @@
-import openai
-import requests
+from flask import Flask, request
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.costmanagement import CostManagementClient
 from botbuilder.core import BotFrameworkAdapter, BotFrameworkAdapterSettings, TurnContext
 from botbuilder.schema import Activity
 import asyncio
-from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -73,4 +71,4 @@ def chat_with_openai(user_input):
     return response.choices[0].text.strip()
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
