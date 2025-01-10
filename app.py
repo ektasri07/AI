@@ -73,4 +73,4 @@ def chat_with_openai(user_input):
     return response.choices[0].text.strip()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+     app.run(host='0.0.0.0', port=8000, debug=True)
