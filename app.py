@@ -10,7 +10,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 # Set your OpenAI API key
-openai.api_key = 'your-openai-api-key'
+openai.api_key = 'your_openai_api_key'
 
 # Set your Azure subscription ID
 subscription_id = '7b9338d2-e8dc-405b-91d7-ef8fe30b97b6'
@@ -20,7 +20,7 @@ credential = DefaultAzureCredential()
 cost_client = CostManagementClient(credential)
 
 # Create Bot Framework Adapter with settings
-settings = BotFrameworkAdapterSettings(app_id='ee2d8235-77e7-4e46-84dd-7fbf44ffe95f', app_password='your-app-password')
+settings = BotFrameworkAdapterSettings(app_id='ee2d8235-77e7-4e46-84dd-7fbf44ffe95f', app_password='your_app_password')
 adapter = BotFrameworkAdapter(settings)
 
 @app.route('/api/messages', methods=['POST'])
