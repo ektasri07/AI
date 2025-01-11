@@ -1,1 +1,1 @@
-web: python -m streamlit app.py
+web: gunicorn --bind 0.0.0.0:8000 --worker-class aiohttp.worker.GunicornWebWorker --timeout 600 app:app

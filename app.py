@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import uvicorn
 from azure.identity import DefaultAzureCredential
 import requests
 from datetime import datetime
@@ -9,7 +10,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-import uvicorn
 
 # Function to fetch cost data
 def get_cost_data(start_date, end_date):
@@ -111,7 +111,7 @@ class CostBot:
 bot = CostBot()
 
 # Adapter settings
-settings = BotFrameworkAdapterSettings("MicrosoftAppId","MicrosoftAppPassword")
+settings = BotFrameworkAdapterSettings("","")
 adapter = BotFrameworkAdapter(settings)
 
 # FastAPI app
