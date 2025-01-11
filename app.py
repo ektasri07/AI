@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import uvicorn
 from azure.identity import DefaultAzureCredential
 import requests
 from datetime import datetime
@@ -111,7 +110,7 @@ class CostBot:
 bot = CostBot()
 
 # Adapter settings
-settings = BotFrameworkAdapterSettings("","")
+settings = BotFrameworkAdapterSettings("", "")
 adapter = BotFrameworkAdapter(settings)
 
 # FastAPI app
@@ -125,15 +124,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 @app.post("/api/messages")
 async def messages(req: Request):
-    body = await req.json()
-    activity = Activity().deserialize(body)
-    auth_header = req.headers['Authorization'] if 'Authorization' in req.headers else ''
-    response = await adapter.process_activity(activity, auth_header, bot.on_turn)
-    if response:
-        return JSONResponse(content=response.body)
-    return JSONResponse(content='OK')
+    try:
+        body = await req.json()
+        logger.info(f"Received request body: {body}")
+        activity = Activity().deserialize(body)
+        auth_header = req.headers['Authorization'] if 'Authorization' in req.headers else ''
+        response = await adapter.process_activity(activity, auth_header, bot.on_turn)
+        if response:
+            return JSONResponse(content=response.body)
+        return JSONResponse(content='OK')
+    except Exception as e:
+        logger.error(f"Error processing request: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=400)
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
