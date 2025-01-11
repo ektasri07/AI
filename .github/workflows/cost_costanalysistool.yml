@@ -7,7 +7,7 @@ name: Build and deploy Python app to Azure Web App - costanalysistool
 on:
   push:
     branches:
-      - main
+      - cost
   workflow_dispatch:
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.9'
 
       - name: Create and start virtual environment
         run: |
@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'costanalysistool'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C74A576C51FC4F1282D4993469A2DA27 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C71FF56F62540628805A15FBB2F516F }}
